@@ -80,15 +80,12 @@ class ExampleModWorldGenBootstrap {
      * @see #createMyLakePlacedFeature(net.minecraft.registry.RegistryEntryLookup)
      */
     private static ConfiguredFeature createMyLakeConfiguredFeature() {
-        final DataPool.Builder<BlockState> bankDataPool = DataPool.<BlockState>builder()
-                .add(Blocks.AMETHYST_BLOCK.getDefaultState(), 5)
-                .add(Blocks.BUDDING_AMETHYST.getDefaultState(), 1)
         return new ConfiguredFeature<>(Feature.LAKE,
                 new LakeFeature.Config(
                         // blocks inside the lake
                         BlockStateProvider.of(Blocks.POWDER_SNOW.getDefaultState()),
                         // blocks around the lake
-                        new WeightedBlockStateProvider(bankDataPool)
+                        BlockStateProvider.of(Blocks.AMETHYST_BLOCK.getDefaultState()),
                 )
         )
     }
