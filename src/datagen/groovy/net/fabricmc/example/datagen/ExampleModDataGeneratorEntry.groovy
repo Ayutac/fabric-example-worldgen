@@ -24,4 +24,9 @@ class ExampleModDataGeneratorEntry implements DataGeneratorEntrypoint {
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ExampleModWorldGenBootstrap::configuredFeatures)
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ExampleModWorldGenBootstrap::placedFeatures)
     }
+
+    @Override
+    String getEffectiveModId() {
+        return "modid"
+    }
 }
