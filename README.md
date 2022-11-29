@@ -1,4 +1,4 @@
-# Fabric Example Mod
+# Fabric Example Worldgen Mod
 
 ## Setup
 
