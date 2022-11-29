@@ -17,6 +17,7 @@ import net.minecraft.world.gen.foliage.BlobFoliagePlacer
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
+import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider
@@ -38,7 +39,9 @@ class ExampleModWorldGenBootstrap {
         def placedFeatureLookup = registry.getRegistryLookup(RegistryKeys.PLACED_FEATURE)
 
         registry.register(ExampleMod.MY_ORE_CF, createMyOreConfiguredFeature())
+        // ores don't need a patched feature, other things usually do
         registry.register(ExampleMod.MY_TREE_CF, createMyTreeConfiguredFeature())
+        registry.register(ExampleMod.MY_TREE_PATCH_CF, createMyTreePatchConfiguredFeature(placedFeatureLookup))
     }
 
     /**
@@ -102,6 +105,17 @@ class ExampleModWorldGenBootstrap {
         )
     }
 
+    private static ConfiguredFeature createMyTreePatchConfiguredFeature(RegistryEntryLookup<PlacedFeature> lookup) {
+        return new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+                ConfiguredFeatures.createRandomPatchFeatureConfig(
+                        // how many tries per patch are made (> 0)
+                        30,
+                        // the ID of the PLACED feature
+                        lookup.getOrThrow(ExampleMod.MY_TREE_PF)
+                )
+        )
+    }
+
     /**
      * Main method for creating placed features.
      *
@@ -113,6 +127,7 @@ class ExampleModWorldGenBootstrap {
 
         registry.register(ExampleMod.MY_ORE_PF, createMyOrePlacedFeature(configuredFeatureLookup))
         registry.register(ExampleMod.MY_TREE_PF, createMyTreePlacedFeature(configuredFeatureLookup))
+        registry.register(ExampleMod.MY_TREE_PATCH_PF, createMyTreePatchPlacedFeature(configuredFeatureLookup))
     }
 
     /**
@@ -160,6 +175,22 @@ class ExampleModWorldGenBootstrap {
                 lookup.getOrThrow(ExampleMod.MY_TREE_CF), List.of(
                 // only place on ground where oak saplings would survive
                 PlacedFeatures.wouldSurvive(Blocks.OAK_SAPLING))
+        )
+    }
+
+    private static PlacedFeature createMyTreePatchPlacedFeature(RegistryEntryLookup<ConfiguredFeature> lookup) {
+        return new PlacedFeature(
+                lookup.getOrThrow(ExampleMod.MY_TREE_PATCH_CF),
+                List.of(
+                        // chance of placement 1 / number (number = integer > 0)
+                        RarityFilterPlacementModifier.of(3),
+                        // put it somewhere random in the chunk or patch, not at 0,y,0
+                        SquarePlacementModifier.of(),
+                        // the heightmap to use
+                        PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                        // the biome decides if it wants this feature or not
+                        BiomePlacementModifier.of()
+                )
         )
     }
 

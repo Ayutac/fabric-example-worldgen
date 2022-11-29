@@ -24,9 +24,11 @@ public class ExampleMod implements ModInitializer {
 
 	public static final RegistryKey<ConfiguredFeature<?,?>> MY_ORE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_ore"));
 	public static final RegistryKey<ConfiguredFeature<?,?>> MY_TREE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_tree"));
+	public static final RegistryKey<ConfiguredFeature<?,?>> MY_TREE_PATCH_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_tree_patch"));
 
 	public static final RegistryKey<PlacedFeature> MY_ORE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_ore"));
 	public static final RegistryKey<PlacedFeature> MY_TREE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree"));
+	public static final RegistryKey<PlacedFeature> MY_TREE_PATCH_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree_patch"));
 
 	@Override
 	public void onInitialize() {
@@ -42,7 +44,7 @@ public class ExampleMod implements ModInitializer {
 				.add(ModificationPhase.ADDITIONS,
 						// we want our tree anywhere (even other dimensions) but in the ocean
 						BiomeSelectors.all().and(BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate()),
-						myTreeModifier());
+						myTreePatchModifier());
 	}
 
 	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myOreModifier() {
@@ -56,12 +58,12 @@ public class ExampleMod implements ModInitializer {
 					MY_ORE_PF);
 	}
 
-	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myTreeModifier() {
+	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myTreePatchModifier() {
 		return (biomeSelectionContext, biomeModificationContext) ->
 			biomeModificationContext.getGenerationSettings().addFeature(
 				// trees to vegetation
 				GenerationStep.Feature.VEGETAL_DECORATION,
-				// this is the key of the placed feature
-				MY_TREE_PF);
+				// this is the key of the PATCH of the placed feature
+				MY_TREE_PATCH_PF);
 	}
 }
