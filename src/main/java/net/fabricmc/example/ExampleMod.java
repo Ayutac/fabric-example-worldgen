@@ -6,6 +6,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,10 @@ public class ExampleMod implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger("modid");
+
+	public static final RegistryKey<ConfiguredFeature<?,?>> MY_ORE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier("modid", "my_ore"));
+
+	public static final RegistryKey<PlacedFeature> MY_ORE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier("modid", "my_ore"));
 
 	@Override
 	public void onInitialize() {
@@ -34,9 +40,11 @@ public class ExampleMod implements ModInitializer {
 		return (biomeSelectionContext, biomeModificationContext) -> {
 			// here we can potentially narrow our biomes down
 			// but here we won't
-			biomeModificationContext.getGenerationSettings().addFeature(GenerationStep.Feature.UNDERGROUND_ORES,
+			biomeModificationContext.getGenerationSettings().addFeature(
+					// ores to ores
+					GenerationStep.Feature.UNDERGROUND_ORES,
 					// this is the key of the placed feature
-					RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier("modid", "my_ore")));
+					MY_ORE_PF);
 		};
 	}
 }

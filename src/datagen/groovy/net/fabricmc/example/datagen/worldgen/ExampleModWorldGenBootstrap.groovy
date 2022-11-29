@@ -1,5 +1,6 @@
 package net.fabricmc.example.datagen.worldgen
 
+import net.fabricmc.example.ExampleMod
 import net.minecraft.block.Blocks
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.RegistryEntryLookup
@@ -33,7 +34,7 @@ class ExampleModWorldGenBootstrap {
     static void configuredFeatures(Registerable<ConfiguredFeature> registry) {
         def placedFeatureLookup = registry.getRegistryLookup(RegistryKeys.PLACED_FEATURE)
 
-        registry.register(RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier("modid", "my_ore")), createMyOreConfiguredFeature())
+        registry.register(ExampleMod.MY_ORE_CF, createMyOreConfiguredFeature())
     }
 
     /**
@@ -49,7 +50,7 @@ class ExampleModWorldGenBootstrap {
                 new TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES),
                 // what we want to insert, as a block state
                 Blocks.ANCIENT_DEBRIS.getDefaultState(),
-                // vein size; bigger number = bigger chunk of the ore
+                // vein size; bigger number = more blocks per vein, but number != blocks per vein
                 8,
                 // chance between 0f and 1f (i.e. 0% to 100%, 0.5f would be 50%) to discard this vein if it is next to air blocks
                 0f))
@@ -78,10 +79,10 @@ class ExampleModWorldGenBootstrap {
     private static PlacedFeature createMyOrePlacedFeature(RegistryEntryLookup<ConfiguredFeature> configuredFeatureLookup) {
         return new PlacedFeature(
                 // assign a configured feature to this placed feature by looking up its (configured feature) ID
-                configuredFeatureLookup.getOrThrow(RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier("modid", "my_ore"))),
+                configuredFeatureLookup.getOrThrow(ExampleMod.MY_ORE_CF),
                 // placement modifiers so this placed feature doesn't end up EVERYWHERE
                 List.of(
-                        // how many veins per chunk
+                        // how many veins per chunk (remember a chunk is quite high)
                         CountPlacementModifier.of(8),
                         // put it somewhere random in the chunk, not at 0,y,0
                         SquarePlacementModifier.of(),
