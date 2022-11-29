@@ -3,22 +3,30 @@ package net.fabricmc.example.datagen.worldgen
 import net.fabricmc.example.ExampleMod
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
+import net.minecraft.fluid.Fluids
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.RegistryEntryLookup
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.structure.rule.TagMatchRuleTest
 import net.minecraft.util.collection.DataPool
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
+import net.minecraft.world.Heightmap
 import net.minecraft.world.gen.YOffset
+import net.minecraft.world.gen.blockpredicate.BlockPredicate
 import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.BlobFoliagePlacer
+import net.minecraft.world.gen.heightprovider.UniformHeightProvider
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
+import net.minecraft.world.gen.placementmodifier.EnvironmentScanPlacementModifier
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
 import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
+import net.minecraft.world.gen.placementmodifier.SurfaceThresholdFilterPlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer
@@ -39,7 +47,8 @@ class ExampleModWorldGenBootstrap {
         def placedFeatureLookup = registry.getRegistryLookup(RegistryKeys.PLACED_FEATURE)
 
         registry.register(ExampleMod.MY_ORE_CF, createMyOreConfiguredFeature())
-        // ores don't need a patched feature, other things usually do
+        registry.register(ExampleMod.MY_LAKE_CF, createMyLakeConfiguredFeature())
+        // ores and lakes don't need a patched feature, other things do
         registry.register(ExampleMod.MY_TREE_CF, createMyTreeConfiguredFeature())
         registry.register(ExampleMod.MY_TREE_PATCH_CF, createMyTreePatchConfiguredFeature(placedFeatureLookup))
     }
@@ -61,6 +70,27 @@ class ExampleModWorldGenBootstrap {
                 8,
                 // chance between 0f and 1f (i.e. 0% to 100%, 0.5f would be 50%) to discard this vein if it is next to air blocks
                 0f))
+    }
+
+    /**
+     * Creates a configured feature for a lake. Notice that the configured feature
+     * only says what form the feature has, what the fluid is and the bank material.
+     * There is no information about its location, including y level and dimension.
+     *
+     * @see #createMyLakePlacedFeature(net.minecraft.registry.RegistryEntryLookup)
+     */
+    private static ConfiguredFeature createMyLakeConfiguredFeature() {
+        final DataPool.Builder<BlockState> bankDataPool = DataPool.<BlockState>builder()
+                .add(Blocks.AMETHYST_BLOCK.getDefaultState(), 5)
+                .add(Blocks.BUDDING_AMETHYST.getDefaultState(), 1)
+        return new ConfiguredFeature<>(Feature.LAKE,
+                new LakeFeature.Config(
+                        // blocks inside the lake
+                        BlockStateProvider.of(Blocks.POWDER_SNOW.getDefaultState()),
+                        // blocks around the lake
+                        new WeightedBlockStateProvider(bankDataPool)
+                )
+        )
     }
 
     /**
@@ -126,6 +156,8 @@ class ExampleModWorldGenBootstrap {
         def configuredFeatureLookup = registry.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE)
 
         registry.register(ExampleMod.MY_ORE_PF, createMyOrePlacedFeature(configuredFeatureLookup))
+        registry.register(ExampleMod.MY_LAKE_PF, createMyLakePlacedFeature(configuredFeatureLookup))
+        // ores and lakes don't need a patched feature, other things do
         registry.register(ExampleMod.MY_TREE_PF, createMyTreePlacedFeature(configuredFeatureLookup))
         registry.register(ExampleMod.MY_TREE_PATCH_PF, createMyTreePatchPlacedFeature(configuredFeatureLookup))
     }
@@ -162,6 +194,29 @@ class ExampleModWorldGenBootstrap {
         )
     }
 
+    /**
+     * Creates a placed feature for a lake. Note that the placed feature isn't given
+     * information about how it will look (besides giving it its configured feature of course),
+     * only where it can be found, with the exception of the biome because
+     * biomes choose their placed features.
+     *
+     * @see #createMyLakeConfiguredFeature()
+     */
+    private static PlacedFeature createMyLakePlacedFeature(RegistryEntryLookup<ConfiguredFeature> lookup) {
+        return new PlacedFeature(
+                // ID of the configured feature
+                lookup.getOrThrow(ExampleMod.MY_LAKE_CF),
+                List.of(
+                        // chance of placement 1 / number (number = integer > 0)
+                        RarityFilterPlacementModifier.of(5),
+                        // can generate underground or on the ground
+                        HeightRangePlacementModifier.of(UniformHeightProvider.create(YOffset.fixed(0), YOffset.getTop())),
+                        // don't place it on the air
+                        EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.bothOf(BlockPredicate.not(BlockPredicate.IS_AIR), BlockPredicate.insideWorldBounds(new BlockPos(0, -5, 0))), 32),
+                        // something something don't mess with oceans
+                        SurfaceThresholdFilterPlacementModifier.of(Heightmap.Type.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -5))
+        )
+    }
     /**
      * Creates a placed feature for a tree. Note that the placed feature isn't given
      * information about how it will look, only where it can be found, with the exception

@@ -23,10 +23,12 @@ public class ExampleMod implements ModInitializer {
 	public static final String MOD_ID = "modid";
 
 	public static final RegistryKey<ConfiguredFeature<?,?>> MY_ORE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_ore"));
+	public static final RegistryKey<ConfiguredFeature<?,?>> MY_LAKE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_lake"));
 	public static final RegistryKey<ConfiguredFeature<?,?>> MY_TREE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_tree"));
 	public static final RegistryKey<ConfiguredFeature<?,?>> MY_TREE_PATCH_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_tree_patch"));
 
 	public static final RegistryKey<PlacedFeature> MY_ORE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_ore"));
+	public static final RegistryKey<PlacedFeature> MY_LAKE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_lake"));
 	public static final RegistryKey<PlacedFeature> MY_TREE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree"));
 	public static final RegistryKey<PlacedFeature> MY_TREE_PATCH_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree_patch"));
 
@@ -42,20 +44,33 @@ public class ExampleMod implements ModInitializer {
 						BiomeSelectors.foundInOverworld(),
 						myOreModifier())
 				.add(ModificationPhase.ADDITIONS,
+						// we want our lake in any forest (even in other dimensions)
+						BiomeSelectors.tag(BiomeTags.IS_FOREST),
+						myLakeModifier())
+				.add(ModificationPhase.ADDITIONS,
 						// we want our tree anywhere (even other dimensions) but in the ocean
-						BiomeSelectors.all().and(BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate()),
+						BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate(),
 						myTreePatchModifier());
 	}
 
 	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myOreModifier() {
 		return (biomeSelectionContext, biomeModificationContext) ->
-			// here we can potentially narrow our biomes down
-			// but here we won't
-			biomeModificationContext.getGenerationSettings().addFeature(
-					// ores to ores
-					GenerationStep.Feature.UNDERGROUND_ORES,
-					// this is the key of the placed feature
-					MY_ORE_PF);
+				// here we can potentially narrow our biomes down
+				// but here we won't
+				biomeModificationContext.getGenerationSettings().addFeature(
+						// ores to ores
+						GenerationStep.Feature.UNDERGROUND_ORES,
+						// this is the key of the placed feature
+						MY_ORE_PF);
+	}
+
+	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myLakeModifier() {
+		return (biomeSelectionContext, biomeModificationContext) ->
+				biomeModificationContext.getGenerationSettings().addFeature(
+						// lakes to lakes
+						GenerationStep.Feature.LAKES,
+						// this is the key of the placed feature
+						MY_LAKE_PF);
 	}
 
 	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myTreePatchModifier() {

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:lake",
+  "config": {
+    "barrier": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:amethyst_block"
+          },
+          "weight": 5
+        },
+        {
+          "data": {
+            "Name": "minecraft:budding_amethyst"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "fluid": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:powder_snow"
+      }
+    }
+  }
+}
