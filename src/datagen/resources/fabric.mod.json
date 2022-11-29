@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "modid-datagen",
+  "name": "Example Mod Datagen",
+  "version": "1.0.0",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "net.fabricmc.example.datagen.ExampleModDataGeneratorEntry"
+    ]
+  }
+}
