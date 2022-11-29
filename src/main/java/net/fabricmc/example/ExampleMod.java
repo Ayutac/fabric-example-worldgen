@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -19,9 +20,13 @@ public class ExampleMod implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger("modid");
 
-	public static final RegistryKey<ConfiguredFeature<?,?>> MY_ORE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier("modid", "my_ore"));
+	public static final String MOD_ID = "modid";
 
-	public static final RegistryKey<PlacedFeature> MY_ORE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier("modid", "my_ore"));
+	public static final RegistryKey<ConfiguredFeature<?,?>> MY_ORE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_ore"));
+	public static final RegistryKey<ConfiguredFeature<?,?>> MY_TREE_CF = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(MOD_ID, "my_tree"));
+
+	public static final RegistryKey<PlacedFeature> MY_ORE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_ore"));
+	public static final RegistryKey<PlacedFeature> MY_TREE_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree"));
 
 	@Override
 	public void onInitialize() {
@@ -29,15 +34,19 @@ public class ExampleMod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		BiomeModifications.create(new Identifier("modid", "features"))
+		BiomeModifications.create(new Identifier(MOD_ID, "features"))
 				.add(ModificationPhase.ADDITIONS,
 						// we want our ore possibly everywhere in the overworld
 						BiomeSelectors.foundInOverworld(),
-						myOreModifier());
+						myOreModifier())
+				.add(ModificationPhase.ADDITIONS,
+						// we want our tree anywhere (even other dimensions) but in the ocean
+						BiomeSelectors.all().and(BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate()),
+						myTreeModifier());
 	}
 
 	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myOreModifier() {
-		return (biomeSelectionContext, biomeModificationContext) -> {
+		return (biomeSelectionContext, biomeModificationContext) ->
 			// here we can potentially narrow our biomes down
 			// but here we won't
 			biomeModificationContext.getGenerationSettings().addFeature(
@@ -45,6 +54,14 @@ public class ExampleMod implements ModInitializer {
 					GenerationStep.Feature.UNDERGROUND_ORES,
 					// this is the key of the placed feature
 					MY_ORE_PF);
-		};
+	}
+
+	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myTreeModifier() {
+		return (biomeSelectionContext, biomeModificationContext) ->
+			biomeModificationContext.getGenerationSettings().addFeature(
+				// trees to vegetation
+				GenerationStep.Feature.VEGETAL_DECORATION,
+				// this is the key of the placed feature
+				MY_TREE_PF);
 	}
 }

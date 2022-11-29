@@ -1,23 +1,26 @@
 package net.fabricmc.example.datagen.worldgen
 
 import net.fabricmc.example.ExampleMod
+import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.RegistryEntryLookup
-import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.structure.rule.TagMatchRuleTest
-import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DataPool
+import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.gen.YOffset
-import net.minecraft.world.gen.feature.ConfiguredFeature
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.OreFeatureConfig
-import net.minecraft.world.gen.feature.PlacedFeature
+import net.minecraft.world.gen.feature.*
+import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
+import net.minecraft.world.gen.foliage.BlobFoliagePlacer
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
+import net.minecraft.world.gen.stateprovider.BlockStateProvider
+import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider
+import net.minecraft.world.gen.trunk.StraightTrunkPlacer
 
 class ExampleModWorldGenBootstrap {
 
@@ -35,12 +38,13 @@ class ExampleModWorldGenBootstrap {
         def placedFeatureLookup = registry.getRegistryLookup(RegistryKeys.PLACED_FEATURE)
 
         registry.register(ExampleMod.MY_ORE_CF, createMyOreConfiguredFeature())
+        registry.register(ExampleMod.MY_TREE_CF, createMyTreeConfiguredFeature())
     }
 
     /**
      * Creates a configured feature for an ore. Notice that the configured feature
      * only says what form the feature has, what it can replace and if it should be discarded
-     * if next to air. There is no information about its location, including height and dimension.
+     * if next to air. There is no information about its location, including y level and dimension.
      *
      * @see #createMyOrePlacedFeature(net.minecraft.registry.RegistryEntryLookup)
      */
@@ -57,6 +61,48 @@ class ExampleModWorldGenBootstrap {
     }
 
     /**
+     * Creates a configured feature for a tree. Notice that the configured feature
+     * only says what form the feature has, including width and height and what blocks it consists of.
+     * There is no information about its location, including y level and dimension.
+     *
+     * @see #createMyTreePlacedFeature(net.minecraft.registry.RegistryEntryLookup)
+     */
+    private static ConfiguredFeature createMyTreeConfiguredFeature() {
+        // what can be used for logs of the tree, via block state
+        final DataPool.Builder<BlockState> logDataPool = DataPool.<BlockState>builder()
+                .add(Blocks.COBBLESTONE.getDefaultState(), 3)
+                .add(Blocks.MOSSY_COBBLESTONE.getDefaultState(), 1)
+        // this will produce a stony tree log with about 1 mossy cobblestone in 4 log blocks
+
+        return new ConfiguredFeature<>(Feature.TREE,
+                new TreeFeatureConfig.Builder(
+                        // blocks for the logs
+                        new WeightedBlockStateProvider(logDataPool),
+                        // size of the trunk: first value is min height (0-32), other two values are random height additions (0-24)
+                        new StraightTrunkPlacer(6, 8, 3),
+                        // blocks for the leaves
+                        BlockStateProvider.of(Blocks.COBBLED_DEEPSLATE),
+                        // according to what pattern the leaves are distributed
+                        new BlobFoliagePlacer(
+                                ConstantIntProvider.create(2),
+                                ConstantIntProvider.create(0),
+                                3
+                        ),
+                        // how thick/wide the tree is depending on its height (the limit(er))
+                        new TwoLayersFeatureSize(
+                                // the limit or separator
+                                10,
+                                // lower size thickness
+                                1,
+                                // upper size thickness
+                                2
+                        )
+                        // we can define decorators to generate here, like bee hives, but won't
+                ).build()
+        )
+    }
+
+    /**
      * Main method for creating placed features.
      *
      * See also <a href="https://minecraft.fandom.com/wiki/Custom_feature#Placed_Feature">Placed Feature</a>
@@ -65,7 +111,8 @@ class ExampleModWorldGenBootstrap {
     static void placedFeatures(Registerable<PlacedFeature> registry) {
         def configuredFeatureLookup = registry.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE)
 
-        registry.register(RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier("modid", "my_ore")), createMyOrePlacedFeature(configuredFeatureLookup))
+        registry.register(ExampleMod.MY_ORE_PF, createMyOrePlacedFeature(configuredFeatureLookup))
+        registry.register(ExampleMod.MY_TREE_PF, createMyTreePlacedFeature(configuredFeatureLookup))
     }
 
     /**
@@ -99,4 +146,21 @@ class ExampleModWorldGenBootstrap {
                 )
         )
     }
+
+    /**
+     * Creates a placed feature for a tree. Note that the placed feature isn't given
+     * information about how it will look, only where it can be found, with the exception
+     * of the biome because biomes choose their placed features.
+     *
+     * @see #createMyTreeConfiguredFeature()
+     */
+    private static PlacedFeature createMyTreePlacedFeature(RegistryEntryLookup<ConfiguredFeature> lookup) {
+        return new PlacedFeature(
+                // the ID of the configured feature
+                lookup.getOrThrow(ExampleMod.MY_TREE_CF), List.of(
+                // only place on ground where oak saplings would survive
+                PlacedFeatures.wouldSurvive(Blocks.OAK_SAPLING))
+        )
+    }
+
 }

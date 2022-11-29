@@ -1,5 +1,6 @@
 package net.fabricmc.example.datagen
 
+import net.fabricmc.example.ExampleMod
 import net.fabricmc.example.datagen.worldgen.ExampleModWorldGenBootstrap
 import net.fabricmc.example.datagen.worldgen.ExampleModWorldGenProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
@@ -27,6 +28,6 @@ class ExampleModDataGeneratorEntry implements DataGeneratorEntrypoint {
 
     @Override
     String getEffectiveModId() {
-        return "modid"
+        return ExampleMod.MOD_ID
     }
 }
