@@ -1,6 +1,7 @@
 package net.fabricmc.example.datagen.worldgen
 
 import net.fabricmc.example.ExampleMod
+import net.fabricmc.example.worldgen.MyHouseStructure
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.fluid.Fluids
@@ -29,6 +30,7 @@ import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.placementmodifier.SurfaceThresholdFilterPlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider
+import net.minecraft.world.gen.structure.Structure
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer
 
 class ExampleModWorldGenBootstrap {
@@ -244,6 +246,10 @@ class ExampleModWorldGenBootstrap {
                         BiomePlacementModifier.of()
                 )
         )
+    }
+
+    static void structures(Registerable<Structure> registry) {
+        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, new MyHouseStructure(null))
     }
 
 }

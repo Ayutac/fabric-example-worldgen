@@ -24,6 +24,7 @@ class ExampleModDataGeneratorEntry implements DataGeneratorEntrypoint {
     void buildRegistry(RegistryBuilder registryBuilder) {
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ExampleModWorldGenBootstrap::configuredFeatures)
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ExampleModWorldGenBootstrap::placedFeatures)
+        registryBuilder.addRegistry(RegistryKeys.STRUCTURE, ExampleModWorldGenBootstrap::structures)
     }
 
     @Override
