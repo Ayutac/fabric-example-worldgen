@@ -60,11 +60,7 @@ public class ExampleMod implements ModInitializer {
 				.add(ModificationPhase.ADDITIONS,
 						// we want our tree anywhere (even other dimensions) but in the ocean
 						BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate(),
-						myTreePatchModifier())
-//				.add(ModificationPhase.ADDITIONS,
-//						BiomeSelectors.all(),
-//						myHouseStructureModifier())
-		;
+						myTreePatchModifier());
 	}
 
 	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myOreModifier() {
@@ -96,11 +92,4 @@ public class ExampleMod implements ModInitializer {
 				MY_TREE_PATCH_PF);
 	}
 
-//	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myHouseStructureModifier() {
-//		return (biomeSelectionContext, biomeModificationContext) ->
-//				biomeModificationContext.getGenerationSettings().addFeature(
-//						// trees to vegetation
-//						GenerationStep.Feature.SURFACE_STRUCTURES,
-//						new MyHouseStructure(null).getFeatureGenerationStep().);
-//	}
 }
