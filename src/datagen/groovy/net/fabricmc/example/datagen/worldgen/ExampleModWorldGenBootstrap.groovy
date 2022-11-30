@@ -16,6 +16,8 @@ import net.minecraft.registry.tag.BlockTags
 import net.minecraft.structure.StructureSet
 import net.minecraft.structure.pool.SinglePoolElement
 import net.minecraft.structure.pool.StructurePool
+import net.minecraft.structure.pool.StructurePoolElement
+import net.minecraft.structure.pool.StructurePools
 import net.minecraft.structure.processor.StructureProcessorLists
 import net.minecraft.structure.rule.TagMatchRuleTest
 import net.minecraft.util.Identifier
@@ -308,18 +310,9 @@ class ExampleModWorldGenBootstrap {
         def processorListLookUp = registry.getRegistryLookup(RegistryKeys.PROCESSOR_LIST)
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, new StructurePool(
                 // since we have no jigsaw, we can default to empty
-                templatePoolLookup.getOrThrow(new Identifier("minecraft","empty")) as RegistryEntry<StructurePool>,
+                templatePoolLookup.getOrThrow(StructurePools.EMPTY),
                 // just one house please
-                List.of(Pair.of(new SinglePoolElement(
-                        // identifier of this pool (don't ask why)
-                        Either.left(new Identifier(ExampleMod.MOD_ID, "my_house")),
-                        // degrade the roof a bit maybe
-                        processorListLookUp.getOrThrow(StructureProcessorLists.ROOF),
-                        // match terrain
-                        StructurePool.Projection.TERRAIN_MATCHING
-                ),
-                        // one house I said
-                        1))
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house").apply(StructurePool.Projection.TERRAIN_MATCHING), 1))
         ))
     }
 

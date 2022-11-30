@@ -8,6 +8,5 @@
     "fabric-datagen": [
       "net.fabricmc.example.datagen.ExampleModDataGeneratorEntry"
     ]
-  },
-  "accessWidener": "modid.accesswidener"
+  }
 }
