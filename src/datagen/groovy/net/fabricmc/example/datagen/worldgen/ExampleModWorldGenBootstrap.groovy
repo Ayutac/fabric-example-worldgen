@@ -235,6 +235,7 @@ class ExampleModWorldGenBootstrap {
                         SurfaceThresholdFilterPlacementModifier.of(Heightmap.Type.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -5))
         )
     }
+
     /**
      * Creates a placed feature for a tree. Note that the placed feature isn't given
      * information about how it will look, only where it can be found, with the exception
@@ -267,6 +268,12 @@ class ExampleModWorldGenBootstrap {
         )
     }
 
+    /**
+     * Main method for creating structures.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_structure#Configured_Structure_Feature">Configured Structure Feature</a>
+     * on the Minecraft Wiki and the <a href="https://misode.github.io/guides/adding-custom-structures/#the-structure">1.19 gist</a>.
+     */
     static void structures(Registerable<Structure> registry) {
         def biomeLookup = registry.getRegistryLookup(RegistryKeys.BIOME)
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
@@ -295,6 +302,12 @@ class ExampleModWorldGenBootstrap {
         )
     }
 
+    /**
+     * Main method for creating structure sets.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_structure#Structure_Set">Structure Set</a>
+     * on the Minecraft Wiki and the <a href="https://misode.github.io/guides/adding-custom-structures/#the-structure-set">1.19 gist</a>.
+     */
     static void structureSets(Registerable<StructureSet> registry) {
         def structureLookup = registry.getRegistryLookup(RegistryKeys.STRUCTURE)
         registry.register(ExampleMod.MY_HOUSE_STRUCTURE_SET, createMyHouseStructureSet(structureLookup))
@@ -317,6 +330,12 @@ class ExampleModWorldGenBootstrap {
         )
     }
 
+    /**
+     * Main method for creating structure template pools.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_structure#Structure_Pool">Structure Set</a>
+     * on the Minecraft Wiki and the <a href="https://misode.github.io/guides/adding-custom-structures/#the-template-pool">1.19 gist</a>.
+     */
     static void templatePools(Registerable<StructurePool> registry) {
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, createMyHouseStructurePool(templatePoolLookup))
