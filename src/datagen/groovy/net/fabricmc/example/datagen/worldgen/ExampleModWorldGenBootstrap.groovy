@@ -1,33 +1,30 @@
 package net.fabricmc.example.datagen.worldgen
 
-import com.mojang.datafixers.util.Either
+
 import com.mojang.datafixers.util.Pair
 import net.fabricmc.example.ExampleMod
-import net.fabricmc.example.worldgen.MyHouseStructure
+
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
-import net.minecraft.fluid.Fluids
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.RegistryEntryLookup
 import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.registry.entry.RegistryEntryList
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.structure.StructureSet
-import net.minecraft.structure.pool.SinglePoolElement
 import net.minecraft.structure.pool.StructurePool
 import net.minecraft.structure.pool.StructurePoolElement
 import net.minecraft.structure.pool.StructurePools
-import net.minecraft.structure.processor.StructureProcessorLists
 import net.minecraft.structure.rule.TagMatchRuleTest
-import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DataPool
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
+import net.minecraft.util.math.random.Random
 import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.HeightContext
 import net.minecraft.world.gen.StructureTerrainAdaptation
 import net.minecraft.world.gen.YOffset
 import net.minecraft.world.gen.blockpredicate.BlockPredicate
@@ -37,6 +34,9 @@ import net.minecraft.world.gen.chunk.placement.StructurePlacement
 import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.BlobFoliagePlacer
+import net.minecraft.world.gen.heightprovider.ConstantHeightProvider
+import net.minecraft.world.gen.heightprovider.HeightProvider
+import net.minecraft.world.gen.heightprovider.HeightProviderType
 import net.minecraft.world.gen.heightprovider.UniformHeightProvider
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
@@ -47,6 +47,7 @@ import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier
 import net.minecraft.world.gen.placementmodifier.SurfaceThresholdFilterPlacementModifier
 import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider
+import net.minecraft.world.gen.structure.JigsawStructure
 import net.minecraft.world.gen.structure.Structure
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer
 
@@ -267,7 +268,8 @@ class ExampleModWorldGenBootstrap {
 
     static void structures(Registerable<Structure> registry) {
         def biomeLookup = registry.getRegistryLookup(RegistryKeys.BIOME)
-        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, new MyHouseStructure(new Structure.Config(
+        def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
+        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, new JigsawStructure(new Structure.Config(
                 // only spawn in plains
                 new RegistryEntryList.Direct<>(List.of(biomeLookup.getOrThrow(BiomeKeys.PLAINS))),
                 // no creature spawns on the structure
@@ -276,7 +278,14 @@ class ExampleModWorldGenBootstrap {
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 // how to accommodate to the surroundings
                 StructureTerrainAdaptation.BEARD_THIN
-        )))
+            ),
+                templatePoolLookup.getOrThrow(ExampleMod.MY_HOUSE_TEMPLATE_POOL),
+                // needed for proper jigsaws, for simple structures we can simply set it to 1
+                1,
+                ConstantHeightProvider.ZERO,
+                // always set this to false
+                false
+        ))
     }
 
     static void structureSets(Registerable<StructureSet> registry) {
@@ -286,28 +295,19 @@ class ExampleModWorldGenBootstrap {
                 structureLookup.getOrThrow(ExampleMod.MY_HOUSE_STRUCTURE),
                 // spawn rules for the house
                 new RandomSpreadStructurePlacement(
-                        // I dunno
-                        BlockPos.ORIGIN,
-                        // this is probably always good
-                        StructurePlacement.FrequencyReductionMethod.DEFAULT,
-                        // frequency
-                        0.5f,
-                        // a random number seed; change for every structure set
-                        975406478,
-                        // no exclusion zone
-                        Optional.empty(),
                         // spacing in chunks, only one structure of this set per number x number chunks
                         5,
                         // min separation in chunks between two structures from this set
                         2,
-                        SpreadType.LINEAR
+                        SpreadType.LINEAR,
+                        // a random number seed; change for every structure set
+                        975406478
                 )
         ))
     }
 
     static void templatePools(Registerable<StructurePool> registry) {
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
-        def processorListLookUp = registry.getRegistryLookup(RegistryKeys.PROCESSOR_LIST)
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, new StructurePool(
                 // since we have no jigsaw, we can default to empty
                 templatePoolLookup.getOrThrow(StructurePools.EMPTY),

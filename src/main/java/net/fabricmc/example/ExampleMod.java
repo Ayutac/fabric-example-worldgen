@@ -1,7 +1,6 @@
 package net.fabricmc.example;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.example.worldgen.MyHouseStructure;
 import net.fabricmc.fabric.api.biome.v1.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -47,9 +46,6 @@ public class ExampleMod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-
-		// initialize the structures
-		MyHouseStructure.class.getName();
 
 		// modify the biomes
 		BiomeModifications.create(new Identifier(MOD_ID, "features"))
