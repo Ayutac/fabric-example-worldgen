@@ -3,11 +3,11 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_house_pool",
+        "location": "modid:my_house",
         "processors": {
           "processors": []
         },
-        "projection": "terrain_matching"
+        "projection": "rigid"
       },
       "weight": 1
     }

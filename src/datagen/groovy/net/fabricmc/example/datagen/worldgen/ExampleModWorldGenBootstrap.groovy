@@ -22,6 +22,7 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.Heightmap
+import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.HeightContext
@@ -269,23 +270,29 @@ class ExampleModWorldGenBootstrap {
     static void structures(Registerable<Structure> registry) {
         def biomeLookup = registry.getRegistryLookup(RegistryKeys.BIOME)
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
-        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, new JigsawStructure(new Structure.Config(
+        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, createMyHouseStructure(biomeLookup, templatePoolLookup))
+    }
+
+    private static Structure createMyHouseStructure(RegistryEntryLookup<Biome> biomeLookup, RegistryEntryLookup<StructurePool> templatePoolLookup) {
+        return new JigsawStructure(new Structure.Config(
                 // only spawn in plains
                 new RegistryEntryList.Direct<>(List.of(biomeLookup.getOrThrow(BiomeKeys.PLAINS))),
                 // no creature spawns on the structure
                 Collections.emptyMap(),
-                // spawn on surface
+                // generate while surface structures are generated
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 // how to accommodate to the surroundings
                 StructureTerrainAdaptation.BEARD_THIN
-            ),
+        ),
                 templatePoolLookup.getOrThrow(ExampleMod.MY_HOUSE_TEMPLATE_POOL),
                 // needed for proper jigsaws, for simple structures we can simply set it to 1
                 1,
                 ConstantHeightProvider.ZERO,
                 // always set this to false
-                false
-        ))
+                false,
+                // generate on surface
+                Heightmap.Type.WORLD_SURFACE_WG
+        )
     }
 
     static void structureSets(Registerable<StructureSet> registry) {
@@ -311,8 +318,8 @@ class ExampleModWorldGenBootstrap {
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, new StructurePool(
                 // since we have no jigsaw, we can default to empty
                 templatePoolLookup.getOrThrow(StructurePools.EMPTY),
-                // just one house please
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house_pool").apply(StructurePool.Projection.TERRAIN_MATCHING), 1))
+                // just one house please, with our structure ID
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house").apply(StructurePool.Projection.RIGID), 1))
         ))
     }
 
