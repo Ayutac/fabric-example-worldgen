@@ -297,9 +297,13 @@ class ExampleModWorldGenBootstrap {
 
     static void structureSets(Registerable<StructureSet> registry) {
         def structureLookup = registry.getRegistryLookup(RegistryKeys.STRUCTURE)
-        registry.register(ExampleMod.MY_HOUSE_STRUCTURE_SET, new StructureSet(
+        registry.register(ExampleMod.MY_HOUSE_STRUCTURE_SET, createMyHouseStructureSet(structureLookup))
+    }
+
+    private static StructureSet createMyHouseStructureSet(RegistryEntryLookup<Structure> lookup) {
+        return new StructureSet(
                 // we only want to spawn the house with this set
-                structureLookup.getOrThrow(ExampleMod.MY_HOUSE_STRUCTURE),
+                lookup.getOrThrow(ExampleMod.MY_HOUSE_STRUCTURE),
                 // spawn rules for the house
                 new RandomSpreadStructurePlacement(
                         // spacing in chunks, only one structure of this set per number x number chunks
@@ -310,17 +314,21 @@ class ExampleModWorldGenBootstrap {
                         // a random number seed; change for every structure set
                         975406478
                 )
-        ))
+        )
     }
 
     static void templatePools(Registerable<StructurePool> registry) {
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
-        registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, new StructurePool(
+        registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, createMyHouseStructurePool(templatePoolLookup))
+    }
+
+    private static StructurePool createMyHouseStructurePool(RegistryEntryLookup<StructurePool> lookup) {
+        return new StructurePool(
                 // since we have no jigsaw, we can default to empty
-                templatePoolLookup.getOrThrow(StructurePools.EMPTY),
+                lookup.getOrThrow(StructurePools.EMPTY),
                 // just one house please, with our structure ID
                 List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house").apply(StructurePool.Projection.RIGID), 1))
-        ))
+                )
     }
 
 }
