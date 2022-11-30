@@ -38,9 +38,9 @@ public class ExampleMod implements ModInitializer {
 
 	public static final RegistryKey<Structure> MY_HOUSE_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_house"));
 
-	public static final RegistryKey<StructureSet> MY_HOUSE_STRUCTURE_SET = RegistryKey.of(RegistryKeys.STRUCTURE_SET, new Identifier(MOD_ID, "my_house"));
+	public static final RegistryKey<StructureSet> MY_HOUSE_STRUCTURE_SET = RegistryKey.of(RegistryKeys.STRUCTURE_SET, new Identifier(MOD_ID, "my_house_set"));
 
-	public static final RegistryKey<StructurePool> MY_HOUSE_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_house"));
+	public static final RegistryKey<StructurePool> MY_HOUSE_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_house_pool"));
 
 	@Override
 	public void onInitialize() {

@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_house",
+        "location": "modid:my_house_pool",
         "processors": {
           "processors": []
         },

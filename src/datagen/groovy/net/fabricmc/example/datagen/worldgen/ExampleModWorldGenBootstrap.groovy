@@ -312,7 +312,7 @@ class ExampleModWorldGenBootstrap {
                 // since we have no jigsaw, we can default to empty
                 templatePoolLookup.getOrThrow(StructurePools.EMPTY),
                 // just one house please
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house").apply(StructurePool.Projection.TERRAIN_MATCHING), 1))
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house_pool").apply(StructurePool.Projection.TERRAIN_MATCHING), 1))
         ))
     }
 
