@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.biome.v1.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.structure.StructureSet;
+import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -36,6 +38,10 @@ public class ExampleMod implements ModInitializer {
 
 	public static final RegistryKey<Structure> MY_HOUSE_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_house"));
 
+	public static final RegistryKey<StructureSet> MY_HOUSE_STRUCTURE_SET = RegistryKey.of(RegistryKeys.STRUCTURE_SET, new Identifier(MOD_ID, "my_house"));
+
+	public static final RegistryKey<StructurePool> MY_HOUSE_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_house"));
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -59,9 +65,10 @@ public class ExampleMod implements ModInitializer {
 						// we want our tree anywhere (even other dimensions) but in the ocean
 						BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate(),
 						myTreePatchModifier())
-				.add(ModificationPhase.ADDITIONS,
-						BiomeSelectors.all(),
-						myHouseStructureModifier());
+//				.add(ModificationPhase.ADDITIONS,
+//						BiomeSelectors.all(),
+//						myHouseStructureModifier())
+		;
 	}
 
 	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myOreModifier() {
@@ -93,11 +100,11 @@ public class ExampleMod implements ModInitializer {
 				MY_TREE_PATCH_PF);
 	}
 
-	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myHouseStructureModifier() {
-		return (biomeSelectionContext, biomeModificationContext) ->
-				biomeModificationContext.getGenerationSettings().addFeature(
-						// trees to vegetation
-						GenerationStep.Feature.SURFACE_STRUCTURES,
-						MyHouseStructure.TYPE);
-	}
+//	private static BiConsumer<BiomeSelectionContext, BiomeModificationContext> myHouseStructureModifier() {
+//		return (biomeSelectionContext, biomeModificationContext) ->
+//				biomeModificationContext.getGenerationSettings().addFeature(
+//						// trees to vegetation
+//						GenerationStep.Feature.SURFACE_STRUCTURES,
+//						new MyHouseStructure(null).getFeatureGenerationStep().);
+//	}
 }

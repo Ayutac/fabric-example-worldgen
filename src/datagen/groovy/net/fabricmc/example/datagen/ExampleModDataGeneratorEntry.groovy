@@ -25,6 +25,8 @@ class ExampleModDataGeneratorEntry implements DataGeneratorEntrypoint {
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ExampleModWorldGenBootstrap::configuredFeatures)
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ExampleModWorldGenBootstrap::placedFeatures)
         registryBuilder.addRegistry(RegistryKeys.STRUCTURE, ExampleModWorldGenBootstrap::structures)
+        registryBuilder.addRegistry(RegistryKeys.STRUCTURE_SET, ExampleModWorldGenBootstrap::structureSets)
+        registryBuilder.addRegistry(RegistryKeys.TEMPLATE_POOL, ExampleModWorldGenBootstrap::templatePools)
     }
 
     @Override

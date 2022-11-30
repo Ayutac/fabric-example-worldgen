@@ -1,0 +1,3 @@
+accessWidener	v2	named
+
+accessible    method    net/minecraft/structure/pool/SinglePoolElement    <init>    (Lcom/mojang/datafixers/util/Either;Lnet/minecraft/util/registry/RegistryEntry;Lnet/minecraft/structure/pool/StructurePool$Projection;)V

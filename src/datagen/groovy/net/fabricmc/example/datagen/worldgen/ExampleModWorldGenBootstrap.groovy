@@ -1,5 +1,7 @@
 package net.fabricmc.example.datagen.worldgen
 
+import com.mojang.datafixers.util.Either
+import com.mojang.datafixers.util.Pair
 import net.fabricmc.example.ExampleMod
 import net.fabricmc.example.worldgen.MyHouseStructure
 import net.minecraft.block.BlockState
@@ -8,15 +10,28 @@ import net.minecraft.fluid.Fluids
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.RegistryEntryLookup
 import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.registry.entry.RegistryEntryList
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.structure.StructureSet
+import net.minecraft.structure.pool.SinglePoolElement
+import net.minecraft.structure.pool.StructurePool
+import net.minecraft.structure.processor.StructureProcessorLists
 import net.minecraft.structure.rule.TagMatchRuleTest
+import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DataPool
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.world.Heightmap
+import net.minecraft.world.biome.BiomeKeys
+import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.StructureTerrainAdaptation
 import net.minecraft.world.gen.YOffset
 import net.minecraft.world.gen.blockpredicate.BlockPredicate
+import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement
+import net.minecraft.world.gen.chunk.placement.SpreadType
+import net.minecraft.world.gen.chunk.placement.StructurePlacement
 import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.BlobFoliagePlacer
@@ -249,7 +264,63 @@ class ExampleModWorldGenBootstrap {
     }
 
     static void structures(Registerable<Structure> registry) {
-        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, new MyHouseStructure(null))
+        def biomeLookup = registry.getRegistryLookup(RegistryKeys.BIOME)
+        registry.register(ExampleMod.MY_HOUSE_STRUCTURE, new MyHouseStructure(new Structure.Config(
+                // only spawn in plains
+                new RegistryEntryList.Direct<>(List.of(biomeLookup.getOrThrow(BiomeKeys.PLAINS))),
+                // no creature spawns on the structure
+                Collections.emptyMap(),
+                // spawn on surface
+                GenerationStep.Feature.SURFACE_STRUCTURES,
+                // how to accommodate to the surroundings
+                StructureTerrainAdaptation.BEARD_THIN
+        )))
+    }
+
+    static void structureSets(Registerable<StructureSet> registry) {
+        def structureLookup = registry.getRegistryLookup(RegistryKeys.STRUCTURE)
+        registry.register(ExampleMod.MY_HOUSE_STRUCTURE_SET, new StructureSet(
+                // we only want to spawn the house with this set
+                structureLookup.getOrThrow(ExampleMod.MY_HOUSE_STRUCTURE),
+                // spawn rules for the house
+                new RandomSpreadStructurePlacement(
+                        // I dunno
+                        BlockPos.ORIGIN,
+                        // this is probably always good
+                        StructurePlacement.FrequencyReductionMethod.DEFAULT,
+                        // frequency
+                        0.5f,
+                        // a random number seed; change for every structure set
+                        975406478,
+                        // no exclusion zone
+                        Optional.empty(),
+                        // spacing in chunks, only one structure of this set per number x number chunks
+                        5,
+                        // min separation in chunks between two structures from this set
+                        2,
+                        SpreadType.LINEAR
+                )
+        ))
+    }
+
+    static void templatePools(Registerable<StructurePool> registry) {
+        def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
+        def processorListLookUp = registry.getRegistryLookup(RegistryKeys.PROCESSOR_LIST)
+        registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, new StructurePool(
+                // since we have no jigsaw, we can default to empty
+                templatePoolLookup.getOrThrow(new Identifier("minecraft","empty")) as RegistryEntry<StructurePool>,
+                // just one house please
+                List.of(Pair.of(new SinglePoolElement(
+                        // identifier of this pool (don't ask why)
+                        Either.left(new Identifier(ExampleMod.MOD_ID, "my_house")),
+                        // degrade the roof a bit maybe
+                        processorListLookUp.getOrThrow(StructureProcessorLists.ROOF),
+                        // match terrain
+                        StructurePool.Projection.TERRAIN_MATCHING
+                ),
+                        // one house I said
+                        1))
+        ))
     }
 
 }
