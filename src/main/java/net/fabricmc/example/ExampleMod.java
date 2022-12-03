@@ -36,10 +36,14 @@ public class ExampleMod implements ModInitializer {
 	public static final RegistryKey<PlacedFeature> MY_TREE_PATCH_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree_patch"));
 
 	public static final RegistryKey<Structure> MY_HOUSE_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_house"));
+	public static final RegistryKey<Structure> MY_DUNGEON_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_dungeon"));
 
 	public static final RegistryKey<StructureSet> MY_HOUSE_STRUCTURE_SET = RegistryKey.of(RegistryKeys.STRUCTURE_SET, new Identifier(MOD_ID, "my_house_set"));
+	public static final RegistryKey<StructureSet> MY_DUNGEON_STRUCTURE_SET = RegistryKey.of(RegistryKeys.STRUCTURE_SET, new Identifier(MOD_ID, "my_dungeon_set"));
 
 	public static final RegistryKey<StructurePool> MY_HOUSE_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_house_pool"));
+	public static final RegistryKey<StructurePool> MY_DUNGEON_ROOMS_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_dungeon/rooms"));
+	public static final RegistryKey<StructurePool> MY_DUNGEON_FODDER_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_dungeon/fodder"));
 
 	@Override
 	public void onInitialize() {

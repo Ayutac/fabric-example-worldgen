@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 19803475,
+    "separation": 10,
+    "spacing": 20
+  },
+  "structures": [
+    {
+      "structure": "modid:my_dungeon",
+      "weight": 1
+    }
+  ]
+}

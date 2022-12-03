@@ -278,6 +278,7 @@ class ExampleModWorldGenBootstrap {
         def biomeLookup = registry.getRegistryLookup(RegistryKeys.BIOME)
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
         registry.register(ExampleMod.MY_HOUSE_STRUCTURE, createMyHouseStructure(biomeLookup, templatePoolLookup))
+        registry.register(ExampleMod.MY_DUNGEON_STRUCTURE, createMyDungeonStructure(biomeLookup, templatePoolLookup))
     }
 
     private static Structure createMyHouseStructure(RegistryEntryLookup<Biome> biomeLookup, RegistryEntryLookup<StructurePool> templatePoolLookup) {
@@ -294,11 +295,35 @@ class ExampleModWorldGenBootstrap {
                 templatePoolLookup.getOrThrow(ExampleMod.MY_HOUSE_TEMPLATE_POOL),
                 // needed for proper jigsaws, for simple structures we can simply set it to 1
                 1,
+                // ???
                 ConstantHeightProvider.ZERO,
                 // always set this to false
                 false,
                 // generate on surface
                 Heightmap.Type.WORLD_SURFACE_WG
+        )
+    }
+
+    private static Structure createMyDungeonStructure(RegistryEntryLookup<Biome> biomeLookup, RegistryEntryLookup<StructurePool> templatePoolLookup) {
+        return new JigsawStructure(new Structure.Config(
+                // only spawn under deserts
+                new RegistryEntryList.Direct<>(List.of(biomeLookup.getOrThrow(BiomeKeys.DESERT))),
+                // no creature spawns on the structure // TODO add some?
+                Collections.emptyMap(),
+                // generate while surface structures are generated
+                GenerationStep.Feature.UNDERGROUND_STRUCTURES,
+                // how to accommodate to the surroundings
+                StructureTerrainAdaptation.BEARD_THIN
+        ),
+                templatePoolLookup.getOrThrow(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL),
+                // depth of 4
+                4,
+                // ???
+                ConstantHeightProvider.ZERO,
+                // always set this to false
+                false,
+                // generate on ocean floor level
+                Heightmap.Type.OCEAN_FLOOR_WG
         )
     }
 
@@ -311,6 +336,7 @@ class ExampleModWorldGenBootstrap {
     static void structureSets(Registerable<StructureSet> registry) {
         def structureLookup = registry.getRegistryLookup(RegistryKeys.STRUCTURE)
         registry.register(ExampleMod.MY_HOUSE_STRUCTURE_SET, createMyHouseStructureSet(structureLookup))
+        registry.register(ExampleMod.MY_DUNGEON_STRUCTURE_SET, createMyDungeonStructureSet(structureLookup))
     }
 
     private static StructureSet createMyHouseStructureSet(RegistryEntryLookup<Structure> lookup) {
@@ -330,6 +356,23 @@ class ExampleModWorldGenBootstrap {
         )
     }
 
+    private static StructureSet createMyDungeonStructureSet(RegistryEntryLookup<Structure> lookup) {
+        return new StructureSet(
+                // we only want to spawn the dungeon with this set
+                lookup.getOrThrow(ExampleMod.MY_DUNGEON_STRUCTURE),
+                // spawn rules for the house
+                new RandomSpreadStructurePlacement(
+                        // spacing in chunks, only one structure of this set per number x number chunks
+                        20,
+                        // min separation in chunks between two structures from this set
+                        10,
+                        SpreadType.LINEAR,
+                        // a random number seed; change for every structure set
+                        19803475
+                )
+        )
+    }
+
     /**
      * Main method for creating structure template pools.
      *
@@ -339,6 +382,8 @@ class ExampleModWorldGenBootstrap {
     static void templatePools(Registerable<StructurePool> registry) {
         def templatePoolLookup = registry.getRegistryLookup(RegistryKeys.TEMPLATE_POOL)
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, createMyHouseStructurePool(templatePoolLookup))
+        registry.register(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL, createMyDungeonRoomsStructurePool(templatePoolLookup))
+        registry.register(ExampleMod.MY_DUNGEON_FODDER_TEMPLATE_POOL, createMyDungeonFodderStructurePool(templatePoolLookup))
     }
 
     private static StructurePool createMyHouseStructurePool(RegistryEntryLookup<StructurePool> lookup) {
@@ -347,7 +392,25 @@ class ExampleModWorldGenBootstrap {
                 lookup.getOrThrow(StructurePools.EMPTY),
                 // just one house please, with our structure ID
                 List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_house").apply(StructurePool.Projection.RIGID), 1))
-                )
+        )
+    }
+
+    private static StructurePool createMyDungeonRoomsStructurePool(RegistryEntryLookup<StructurePool> lookup) {
+        return new StructurePool(
+                // TODO comment/correct
+                lookup.getOrThrow(StructurePools.EMPTY),
+                // the rooms with their structure ID // TODO more than 1
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_four").apply(StructurePool.Projection.RIGID), 1))
+        )
+    }
+
+    private static StructurePool createMyDungeonFodderStructurePool(RegistryEntryLookup<StructurePool> lookup) {
+        return new StructurePool(
+                // TODO comment/correct
+                lookup.getOrThrow(StructurePools.EMPTY),
+                // the fodder with their structure ID // TODO more than 1
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/zombie").apply(StructurePool.Projection.RIGID), 1))
+        )
     }
 
 }
