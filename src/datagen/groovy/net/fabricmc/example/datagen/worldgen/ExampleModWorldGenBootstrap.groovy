@@ -35,6 +35,7 @@ import net.minecraft.world.gen.chunk.placement.StructurePlacement
 import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.BlobFoliagePlacer
+import net.minecraft.world.gen.heightprovider.BiasedToBottomHeightProvider
 import net.minecraft.world.gen.heightprovider.ConstantHeightProvider
 import net.minecraft.world.gen.heightprovider.HeightProvider
 import net.minecraft.world.gen.heightprovider.HeightProviderType
@@ -295,7 +296,7 @@ class ExampleModWorldGenBootstrap {
                 templatePoolLookup.getOrThrow(ExampleMod.MY_HOUSE_TEMPLATE_POOL),
                 // needed for proper jigsaws, for simple structures we can simply set it to 1
                 1,
-                // ???
+                // no change in relation to world surface
                 ConstantHeightProvider.ZERO,
                 // always set this to false
                 false,
@@ -318,12 +319,12 @@ class ExampleModWorldGenBootstrap {
                 templatePoolLookup.getOrThrow(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL),
                 // depth of 4
                 4,
-                // ???
-                ConstantHeightProvider.ZERO,
+                // generate in deepslate level // TODO what is the "inner" for?
+                BiasedToBottomHeightProvider.create(YOffset.BOTTOM, YOffset.aboveBottom(64), 10),
                 // always set this to false
                 false,
                 // generate on ocean floor level
-                Heightmap.Type.OCEAN_FLOOR_WG
+                Heightmap.Type.MOTION_BLOCKING
         )
     }
 
@@ -384,6 +385,7 @@ class ExampleModWorldGenBootstrap {
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, createMyHouseStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL, createMyDungeonRoomsStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_FODDER_TEMPLATE_POOL, createMyDungeonFodderStructurePool(templatePoolLookup))
+        registry.register(ExampleMod.MY_DUNGEON_LIGHTS_TEMPLATE_POOL, createMyDungeonLightsStructurePool(templatePoolLookup))
     }
 
     private static StructurePool createMyHouseStructurePool(RegistryEntryLookup<StructurePool> lookup) {
@@ -408,8 +410,25 @@ class ExampleModWorldGenBootstrap {
         return new StructurePool(
                 // TODO comment/correct
                 lookup.getOrThrow(StructurePools.EMPTY),
-                // the fodder with their structure ID // TODO more than 1
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/zombie").apply(StructurePool.Projection.RIGID), 1))
+                // the fodder with their structure ID
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/zombie").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/husk").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/drowned").apply(StructurePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/skeleton").apply(StructurePool.Projection.RIGID), 7),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/stray").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/witch").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/pillager").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/vindicator").apply(StructurePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/cave_spider").apply(StructurePool.Projection.RIGID), 2))
+        )
+    }
+
+    private static StructurePool createMyDungeonLightsStructurePool(RegistryEntryLookup<StructurePool> lookup) {
+        return new StructurePool(
+                // TODO comment/correct
+                lookup.getOrThrow(StructurePools.EMPTY),
+                // the lights with their structure ID
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/lights/soul_lantern").apply(StructurePool.Projection.RIGID), 1))
         )
     }
 

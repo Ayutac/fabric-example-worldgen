@@ -2,11 +2,18 @@
   "type": "minecraft:jigsaw",
   "biomes": "minecraft:desert",
   "max_distance_from_center": 80,
-  "project_start_to_heightmap": "OCEAN_FLOOR_WG",
+  "project_start_to_heightmap": "MOTION_BLOCKING",
   "size": 4,
   "spawn_overrides": {},
   "start_height": {
-    "absolute": 0
+    "type": "minecraft:biased_to_bottom",
+    "inner": 10,
+    "max_inclusive": {
+      "above_bottom": 64
+    },
+    "min_inclusive": {
+      "above_bottom": 0
+    }
   },
   "start_pool": "modid:my_dungeon/rooms",
   "step": "underground_structures",
