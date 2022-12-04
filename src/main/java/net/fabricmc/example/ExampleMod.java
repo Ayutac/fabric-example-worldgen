@@ -44,6 +44,8 @@ public class ExampleMod implements ModInitializer {
 	public static final RegistryKey<StructurePool> MY_HOUSE_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_house_pool"));
 	public static final RegistryKey<StructurePool> MY_DUNGEON_ROOMS_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_dungeon/rooms"));
 	public static final RegistryKey<StructurePool> MY_DUNGEON_FODDER_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_dungeon/monsters/fodder"));
+	public static final RegistryKey<StructurePool> MY_DUNGEON_MIDBOSSES_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_dungeon/monsters/midbosses"));
+	public static final RegistryKey<StructurePool> MY_DUNGEON_BOSSES_TEMPLATE_POOL = RegistryKey.of(RegistryKeys.TEMPLATE_POOL, new Identifier(MOD_ID, "my_dungeon/monsters/bosses"));
 
 	@Override
 	public void onInitialize() {

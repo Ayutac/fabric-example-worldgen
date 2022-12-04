@@ -9,7 +9,18 @@
         },
         "projection": "rigid"
       },
-      "weight": 1
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "modid:my_dungeon/rooms/fork_three",
+        "processors": {
+          "processors": []
+        },
+        "projection": "rigid"
+      },
+      "weight": 3
     }
   ],
   "fallback": "minecraft:empty"

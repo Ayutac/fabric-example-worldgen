@@ -385,6 +385,7 @@ class ExampleModWorldGenBootstrap {
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, createMyHouseStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL, createMyDungeonRoomsStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_FODDER_TEMPLATE_POOL, createMyDungeonFodderStructurePool(templatePoolLookup))
+        registry.register(ExampleMod.MY_DUNGEON_MIDBOSSES_TEMPLATE_POOL, createMyDungeonMidbossesStructurePool(templatePoolLookup))
     }
 
     private static StructurePool createMyHouseStructurePool(RegistryEntryLookup<StructurePool> lookup) {
@@ -400,8 +401,9 @@ class ExampleModWorldGenBootstrap {
         return new StructurePool(
                 // TODO comment/correct
                 lookup.getOrThrow(StructurePools.EMPTY),
-                // the rooms with their structure ID // TODO more than 1
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_four").apply(StructurePool.Projection.RIGID), 1))
+                // the rooms with their structure ID
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_four").apply(StructurePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_three").apply(StructurePool.Projection.RIGID), 3))
         )
     }
 
@@ -419,6 +421,33 @@ class ExampleModWorldGenBootstrap {
                         Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/pillager").apply(StructurePool.Projection.RIGID), 5),
                         Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/vindicator").apply(StructurePool.Projection.RIGID), 2),
                         Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/cave_spider").apply(StructurePool.Projection.RIGID), 2))
+        )
+    }
+
+    private static StructurePool createMyDungeonMidbossesStructurePool(RegistryEntryLookup<StructurePool> lookup) {
+        return new StructurePool(
+                // if midboss not available, switch to fodder
+                lookup.getOrThrow(ExampleMod.MY_DUNGEON_FODDER_TEMPLATE_POOL),
+                // the mid bosses with their structure ID
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/midbosses/creeper").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/midbosses/iron_skeleton").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/midbosses/iron_zombie").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/midbosses/phantom").apply(StructurePool.Projection.RIGID), 1),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/midbosses/wither_skeleton").apply(StructurePool.Projection.RIGID), 2))
+        )
+    }
+
+    private static StructurePool createMyDungeonBossesStructurePool(RegistryEntryLookup<StructurePool> lookup) {
+        return new StructurePool(
+                // if boss not available, switch to midboss
+                lookup.getOrThrow(ExampleMod.MY_DUNGEON_MIDBOSSES_TEMPLATE_POOL),
+                // the bosses with their structure ID
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/bosses/charged_creeper").apply(StructurePool.Projection.RIGID), 1),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/bosses/diamond_skeleton").apply(StructurePool.Projection.RIGID), 6),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/bosses/diamond_zombie").apply(StructurePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/bosses/evoker").apply(StructurePool.Projection.RIGID), 1),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/bosses/iron_wither_skeleton").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/bosses/iron_baby_zombie").apply(StructurePool.Projection.RIGID), 2))
         )
     }
 
