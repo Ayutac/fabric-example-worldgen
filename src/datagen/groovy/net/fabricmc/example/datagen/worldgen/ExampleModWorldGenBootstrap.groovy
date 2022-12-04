@@ -385,7 +385,6 @@ class ExampleModWorldGenBootstrap {
         registry.register(ExampleMod.MY_HOUSE_TEMPLATE_POOL, createMyHouseStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL, createMyDungeonRoomsStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_FODDER_TEMPLATE_POOL, createMyDungeonFodderStructurePool(templatePoolLookup))
-        registry.register(ExampleMod.MY_DUNGEON_LIGHTS_TEMPLATE_POOL, createMyDungeonLightsStructurePool(templatePoolLookup))
     }
 
     private static StructurePool createMyHouseStructurePool(RegistryEntryLookup<StructurePool> lookup) {
@@ -420,15 +419,6 @@ class ExampleModWorldGenBootstrap {
                         Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/pillager").apply(StructurePool.Projection.RIGID), 5),
                         Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/vindicator").apply(StructurePool.Projection.RIGID), 2),
                         Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/cave_spider").apply(StructurePool.Projection.RIGID), 2))
-        )
-    }
-
-    private static StructurePool createMyDungeonLightsStructurePool(RegistryEntryLookup<StructurePool> lookup) {
-        return new StructurePool(
-                // TODO comment/correct
-                lookup.getOrThrow(StructurePools.EMPTY),
-                // the lights with their structure ID
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/lights/soul_lantern").apply(StructurePool.Projection.RIGID), 1))
         )
     }
 

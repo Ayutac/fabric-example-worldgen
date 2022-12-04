@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/zombie",
+        "location": "modid:my_dungeon/monsters/fodder/zombie",
         "processors": {
           "processors": []
         },
@@ -14,7 +14,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/husk",
+        "location": "modid:my_dungeon/monsters/fodder/husk",
         "processors": {
           "processors": []
         },
@@ -25,7 +25,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/drowned",
+        "location": "modid:my_dungeon/monsters/fodder/drowned",
         "processors": {
           "processors": []
         },
@@ -36,7 +36,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/skeleton",
+        "location": "modid:my_dungeon/monsters/fodder/skeleton",
         "processors": {
           "processors": []
         },
@@ -47,7 +47,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/stray",
+        "location": "modid:my_dungeon/monsters/fodder/stray",
         "processors": {
           "processors": []
         },
@@ -58,7 +58,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/witch",
+        "location": "modid:my_dungeon/monsters/fodder/witch",
         "processors": {
           "processors": []
         },
@@ -69,7 +69,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/pillager",
+        "location": "modid:my_dungeon/monsters/fodder/pillager",
         "processors": {
           "processors": []
         },
@@ -80,7 +80,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/vindicator",
+        "location": "modid:my_dungeon/monsters/fodder/vindicator",
         "processors": {
           "processors": []
         },
@@ -91,7 +91,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/fodder/cave_spider",
+        "location": "modid:my_dungeon/monsters/fodder/cave_spider",
         "processors": {
           "processors": []
         },
