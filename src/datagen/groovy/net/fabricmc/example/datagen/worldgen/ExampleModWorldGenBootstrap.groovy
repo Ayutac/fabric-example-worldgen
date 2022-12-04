@@ -411,15 +411,15 @@ class ExampleModWorldGenBootstrap {
                 // TODO comment/correct
                 lookup.getOrThrow(StructurePools.EMPTY),
                 // the fodder with their structure ID
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/zombie").apply(StructurePool.Projection.RIGID), 5),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/husk").apply(StructurePool.Projection.RIGID), 3),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/drowned").apply(StructurePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/skeleton").apply(StructurePool.Projection.RIGID), 7),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/stray").apply(StructurePool.Projection.RIGID), 3),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/witch").apply(StructurePool.Projection.RIGID), 3),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/pillager").apply(StructurePool.Projection.RIGID), 5),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/vindicator").apply(StructurePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/fodder/cave_spider").apply(StructurePool.Projection.RIGID), 2))
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/zombie").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/husk").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/drowned").apply(StructurePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/skeleton").apply(StructurePool.Projection.RIGID), 7),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/stray").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/witch").apply(StructurePool.Projection.RIGID), 3),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/pillager").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/vindicator").apply(StructurePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/monsters/fodder/cave_spider").apply(StructurePool.Projection.RIGID), 2))
         )
     }
 
