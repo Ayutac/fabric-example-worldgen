@@ -3,29 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/rooms/fork_four",
-        "processors": {
-          "processors": []
-        },
-        "projection": "rigid"
-      },
-      "weight": 4
-    },
-    {
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/rooms/fork_three",
-        "processors": {
-          "processors": []
-        },
-        "projection": "rigid"
-      },
-      "weight": 5
-    },
-    {
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/rooms/fork_three_lava",
+        "location": "modid:my_dungeon/monsters/bosses/charged_creeper",
         "processors": {
           "processors": []
         },
@@ -36,7 +14,18 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/rooms/gangway",
+        "location": "modid:my_dungeon/monsters/bosses/diamond_skeleton",
+        "processors": {
+          "processors": []
+        },
+        "projection": "rigid"
+      },
+      "weight": 6
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "modid:my_dungeon/monsters/bosses/diamond_zombie",
         "processors": {
           "processors": []
         },
@@ -47,25 +36,36 @@
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/rooms/turnway",
+        "location": "modid:my_dungeon/monsters/bosses/evoker",
         "processors": {
           "processors": []
         },
         "projection": "rigid"
       },
-      "weight": 4
+      "weight": 1
     },
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "modid:my_dungeon/rooms/treasure_room",
+        "location": "modid:my_dungeon/monsters/bosses/iron_wither_skeleton",
         "processors": {
           "processors": []
         },
         "projection": "rigid"
       },
       "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "modid:my_dungeon/monsters/bosses/iron_baby_zombie",
+        "processors": {
+          "processors": []
+        },
+        "projection": "rigid"
+      },
+      "weight": 2
     }
   ],
-  "fallback": "minecraft:empty"
+  "fallback": "modid:my_dungeon/monsters/midbosses"
 }

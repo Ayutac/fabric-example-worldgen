@@ -386,6 +386,7 @@ class ExampleModWorldGenBootstrap {
         registry.register(ExampleMod.MY_DUNGEON_ROOMS_TEMPLATE_POOL, createMyDungeonRoomsStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_FODDER_TEMPLATE_POOL, createMyDungeonFodderStructurePool(templatePoolLookup))
         registry.register(ExampleMod.MY_DUNGEON_MIDBOSSES_TEMPLATE_POOL, createMyDungeonMidbossesStructurePool(templatePoolLookup))
+        registry.register(ExampleMod.MY_DUNGEON_BOSSES_TEMPLATE_POOL, createMyDungeonBossesStructurePool(templatePoolLookup))
     }
 
     private static StructurePool createMyHouseStructurePool(RegistryEntryLookup<StructurePool> lookup) {
@@ -402,8 +403,12 @@ class ExampleModWorldGenBootstrap {
                 // TODO comment/correct
                 lookup.getOrThrow(StructurePools.EMPTY),
                 // the rooms with their structure ID
-                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_four").apply(StructurePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_three").apply(StructurePool.Projection.RIGID), 3))
+                List.of(Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_four").apply(StructurePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_three").apply(StructurePool.Projection.RIGID), 5),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/fork_three_lava").apply(StructurePool.Projection.RIGID), 1),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/gangway").apply(StructurePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/turnway").apply(StructurePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.ofSingle(ExampleMod.MOD_ID + ":my_dungeon/rooms/treasure_room").apply(StructurePool.Projection.RIGID), 3))
         )
     }
 
