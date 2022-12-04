@@ -23,6 +23,7 @@ import net.minecraft.util.math.intprovider.ConstantIntProvider
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.Heightmap
 import net.minecraft.world.biome.Biome
+import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.HeightContext
@@ -266,6 +267,49 @@ class ExampleModWorldGenBootstrap {
                         // the biome decides if it wants this feature or not
                         BiomePlacementModifier.of()
                 )
+        )
+    }
+
+    /**
+     * Main method for creating biomes.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_biome">Custom Biome</a>
+     * on the Minecraft Wiki.
+     */
+    static void biomes(Registerable<Biome> registry) {
+        registry.register(ExampleMod.MY_BIOME, createMyBiome())
+    }
+
+    private static Biome createMyBiome() {
+        return new Biome(
+                new Biome.Weather(
+                        // if it rains, snows or nothing falls, like in a desert
+                        Biome.Precipitation.RAIN,
+                        // temperature, between 0f and 1f. Lower is hotter (?), don't have 0.15f or lower if precipitation is not NONE
+                        0.5f,
+                        // frozen is only other option, maybe use that for cold biomes
+                        Biome.TemperatureModifier.NONE,
+                        // downfall, affects grass and foliage color. Between 0f and 1f, > 0.85f makes fire go out quicker, for wet biomes
+                        0.8f
+                ),
+                new BiomeEffects.Builder().
+                        // color of fog over land in the distance
+                        fogColor(0x1D8CB3).
+                        skyColor(0x23BAEE).
+                        waterColor(0x5D8ADC).
+                        // color of fog in water in the distance
+                        waterFogColor(0x9A9AD2).
+                        // optional
+                        grassColor(0x508E4A).
+                        // optional
+                        foliageColor(0x9FD29A).
+                        // optional, this is the default
+                        grassColorModifier(BiomeEffects.GrassColorModifier.NONE).
+                        // biome particles (optional) also go here
+                        //particleConfig(...).
+                        // sound stuff is also optional, but goes here too
+                        build(),
+
         )
     }
 
