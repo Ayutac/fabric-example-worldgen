@@ -281,18 +281,16 @@ class ExampleModWorldGenBootstrap {
     }
 
     private static Biome createMyBiome() {
-        return new Biome(
-                new Biome.Weather(
-                        // if it rains, snows or nothing falls, like in a desert
-                        Biome.Precipitation.RAIN,
-                        // temperature, between 0f and 1f. Lower is hotter (?), don't have 0.15f or lower if precipitation is not NONE
-                        0.5f,
-                        // frozen is only other option, maybe use that for cold biomes
-                        Biome.TemperatureModifier.NONE,
-                        // downfall, affects grass and foliage color. Between 0f and 1f, > 0.85f makes fire go out quicker, for wet biomes
-                        0.8f
-                ),
-                new BiomeEffects.Builder().
+        return new Biome.Builder()
+                // if it rains, snows or nothing falls, like in a desert
+                .precipitation(Biome.Precipitation.RAIN)
+                // temperature, between 0f and 1f. Lower is hotter (?), don't have 0.15f or lower if precipitation is not NONE
+                .temperature(0.5f)
+                // frozen is only other option, maybe use that for cold biomes
+                .temperatureModifier(Biome.TemperatureModifier.NONE)
+                // downfall, affects grass and foliage color. Between 0f and 1f, > 0.85f makes fire go out quicker, for wet biomes
+                .downfall(0.8f)
+                .effects(new BiomeEffects.Builder().
                         // color of fog over land in the distance
                         fogColor(0x1D8CB3).
                         skyColor(0x23BAEE).
@@ -308,9 +306,10 @@ class ExampleModWorldGenBootstrap {
                         // biome particles (optional) also go here
                         //particleConfig(...).
                         // sound stuff is also optional, but goes here too
-                        build(),
-
-        )
+                        build())
+                .generationSettings()
+                .spawnSettings()
+                .build()
     }
 
     /**
