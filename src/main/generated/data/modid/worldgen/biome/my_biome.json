@@ -1,0 +1,56 @@
+{
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "downfall": 0.8,
+  "effects": {
+    "fog_color": 1936563,
+    "foliage_color": 10474138,
+    "grass_color": 5279306,
+    "sky_color": 2341614,
+    "water_color": 6130396,
+    "water_fog_color": 10132178
+  },
+  "features": [
+    [],
+    [
+      "modid:my_lake"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [
+      "minecraft:desert_well"
+    ],
+    [],
+    [
+      "modid:my_ore",
+      "minecraft:ore_diamond_large"
+    ],
+    [],
+    [],
+    [
+      "modid:my_tree_patch",
+      "minecraft:jungle_bush",
+      "minecraft:dark_forest_vegetation"
+    ]
+  ],
+  "precipitation": "rain",
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.5
+}
