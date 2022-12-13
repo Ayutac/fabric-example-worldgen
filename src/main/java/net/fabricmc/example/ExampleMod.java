@@ -64,7 +64,7 @@ public class ExampleMod implements ModInitializer {
 						BiomeSelectors.tag(BiomeTags.IS_FOREST),
 						myLakeModifier())
 				.add(ModificationPhase.ADDITIONS,
-						// we want our tree anywhere (even other dimensions) but in the ocean
+						// we want our tree anywhere (even other dimensions) but not in the ocean
 						BiomeSelectors.tag(BiomeTags.IS_OCEAN).negate(),
 						myTreePatchModifier());
 	}
