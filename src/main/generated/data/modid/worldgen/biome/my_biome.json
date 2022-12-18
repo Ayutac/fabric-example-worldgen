@@ -29,15 +29,13 @@
     ],
     [],
     [
-      "modid:my_ore",
       "minecraft:ore_diamond_large"
     ],
     [],
     [],
     [
-      "modid:my_tree_patch",
       "minecraft:jungle_bush",
-      "minecraft:dark_forest_vegetation"
+      "minecraft:patch_berry_common"
     ]
   ],
   "precipitation": "rain",

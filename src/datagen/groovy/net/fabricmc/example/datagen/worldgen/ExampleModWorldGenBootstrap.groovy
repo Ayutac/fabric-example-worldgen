@@ -333,16 +333,16 @@ class ExampleModWorldGenBootstrap {
                         // for surface structures like desert wells (NOT trees!)
                         feature(GenerationStep.Feature.SURFACE_STRUCTURES, MiscPlacedFeatures.DESERT_WELL).
                         // for ore blobs, including gravel/dirt/tuff blobs, and disks of clay etc
-                        feature(GenerationStep.Feature.UNDERGROUND_ORES, ExampleMod.MY_ORE_PF).
                         feature(GenerationStep.Feature.UNDERGROUND_ORES, OrePlacedFeatures.ORE_DIAMOND_LARGE).
                         // this one is used for nether ore blobs for whatever reason
-                        //feature(GenerationStep.Feature.UNDERGROUND_DECORATION).
+                        //feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ...).
                         // for surface lakes I think
                         //feature(GenerationStep.Feature.FLUID_SPRINGS, ...).
                         // trees as well as the small stuff like flowers, vines etc
-                        feature(GenerationStep.Feature.VEGETAL_DECORATION, ExampleMod.MY_TREE_PATCH_PF).
                         feature(GenerationStep.Feature.VEGETAL_DECORATION, TreePlacedFeatures.JUNGLE_BUSH).
-                        feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.DARK_FOREST_VEGETATION).
+                        feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_BERRY_COMMON).
+                        // be careful to NOT add features here AND so in biome modifications that it applies to this biome
+                        // that can lead to confusing feature cycle order exceptions
                         build())
                 .spawnSettings(new SpawnSettings.Builder().
                         // TODO
