@@ -41,13 +41,53 @@
   "precipitation": "rain",
   "spawn_costs": {},
   "spawners": {
-    "ambient": [],
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 1
+      }
+    ],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "minecraft:pig",
+        "maxCount": 5,
+        "minCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:sheep",
+        "maxCount": 5,
+        "minCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:fox",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
     "misc": [],
-    "monster": [],
+    "monster": [
+      {
+        "type": "minecraft:zombie",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      }
+    ],
     "underground_water_creature": [],
-    "water_ambient": [],
+    "water_ambient": [
+      {
+        "type": "minecraft:salmon",
+        "maxCount": 5,
+        "minCount": 5,
+        "weight": 5
+      }
+    ],
     "water_creature": []
   },
   "temperature": 0.5

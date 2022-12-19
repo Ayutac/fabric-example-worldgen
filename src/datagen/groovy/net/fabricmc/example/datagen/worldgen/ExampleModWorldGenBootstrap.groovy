@@ -6,6 +6,8 @@ import net.fabricmc.example.ExampleMod
 
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.SpawnGroup
 import net.minecraft.registry.Registerable
 import net.minecraft.registry.RegistryEntryLookup
 import net.minecraft.registry.RegistryKeys
@@ -275,7 +277,8 @@ class ExampleModWorldGenBootstrap {
     }
 
     /**
-     * Main method for creating biomes.
+     * Main method for creating biomes. There is currently no way in FAPI to add created biomes to the overworld dimension
+     * without manually overwriting the whole dimension file. Look up Terrablender for another way.
      *
      * See also <a href="https://minecraft.fandom.com/wiki/Custom_biome">Custom Biome</a>
      * on the Minecraft Wiki.
@@ -288,7 +291,6 @@ class ExampleModWorldGenBootstrap {
     }
 
     private static Biome createMyBiome(RegistryEntryLookup<PlacedFeature> placedFeatureLookup, RegistryEntryLookup<ConfiguredCarver<?>> configuredCarverLookup) {
-
         return new Biome.Builder()
                 // if it rains, snows or nothing falls, like in a desert
                 .precipitation(Biome.Precipitation.RAIN)
@@ -345,7 +347,24 @@ class ExampleModWorldGenBootstrap {
                         // that can lead to confusing feature cycle order exceptions
                         build())
                 .spawnSettings(new SpawnSettings.Builder().
-                        // TODO
+                        // AMBIENT is for bats, rarely spawn one to two
+                        spawn(SpawnGroup.AMBIENT, new SpawnSettings.SpawnEntry(EntityType.BAT, 1, 1, 2)).
+                        // no axolotls in our biome
+                        //spawn(SpawnGroup.AXOLOTL, ...).
+                        // CREATURE is for peaceful land mobs / animals; polar bears and striders are included here
+                        spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.PIG, 10, 3, 5)).
+                        spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.SHEEP, 10, 3, 5)).
+                        spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.FOX, 10, 1, 2)).
+                        // no idea what this is for
+                        //spawn(SpawnGroup.MISC, ...).
+                        // MONSTER for neutral and hostile monsters
+                        spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntityType.ZOMBIE, 10, 4, 4)).
+                        // UNDERGROUND_WATER_CREATURE is for glow squids
+                        //spawn(SpawnGroup.UNDERGROUND_WATER_CREATURE, ...).
+                        // WATER_AMBIENT is for fish
+                        spawn(SpawnGroup.WATER_AMBIENT, new SpawnSettings.SpawnEntry(EntityType.SALMON, 5, 5, 5)).
+                        // WATER_CREATURE is for squids and dolphins
+                        //spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.SQUID), 10, 5, 5).
                         build())
                 .build()
     }
