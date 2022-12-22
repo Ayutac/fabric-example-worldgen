@@ -30,6 +30,8 @@ import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.biome.GenerationSettings
 import net.minecraft.world.biome.SpawnSettings
+import net.minecraft.world.biome.source.BiomeSource
+import net.minecraft.world.dimension.DimensionOptions
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
 import net.minecraft.world.gen.GenerationStep
@@ -39,9 +41,14 @@ import net.minecraft.world.gen.YOffset
 import net.minecraft.world.gen.blockpredicate.BlockPredicate
 import net.minecraft.world.gen.carver.ConfiguredCarver
 import net.minecraft.world.gen.carver.ConfiguredCarvers
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings
+import net.minecraft.world.gen.chunk.GenerationShapeConfig
+import net.minecraft.world.gen.chunk.NoiseChunkGenerator
 import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement
 import net.minecraft.world.gen.chunk.placement.SpreadType
 import net.minecraft.world.gen.chunk.placement.StructurePlacement
+import net.minecraft.world.gen.densityfunction.DensityFunction
+import net.minecraft.world.gen.densityfunction.DensityFunctionTypes
 import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.BlobFoliagePlacer
@@ -50,6 +57,7 @@ import net.minecraft.world.gen.heightprovider.ConstantHeightProvider
 import net.minecraft.world.gen.heightprovider.HeightProvider
 import net.minecraft.world.gen.heightprovider.HeightProviderType
 import net.minecraft.world.gen.heightprovider.UniformHeightProvider
+import net.minecraft.world.gen.noise.NoiseRouter
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier
 import net.minecraft.world.gen.placementmodifier.EnvironmentScanPlacementModifier
@@ -61,6 +69,7 @@ import net.minecraft.world.gen.stateprovider.BlockStateProvider
 import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider
 import net.minecraft.world.gen.structure.JigsawStructure
 import net.minecraft.world.gen.structure.Structure
+import net.minecraft.world.gen.surfacebuilder.MaterialRules
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer
 
 class ExampleModWorldGenBootstrap {
@@ -373,7 +382,7 @@ class ExampleModWorldGenBootstrap {
     }
 
     /**
-     * Main method for creating dimensions.
+     * Main method for creating dimension types.
      *
      * See also <a href="https://minecraft.fandom.com/wiki/Custom_dimension#Dimension_type">Custom Dimension Type</a>
      * on the Minecraft Wiki.
@@ -423,6 +432,102 @@ class ExampleModWorldGenBootstrap {
                         7
                 )
         )
+    }
+
+    /**
+     * Main method for creating chunk generator settings.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_dimension#Dimension">Custom Dimension</a>
+     * and <a href="https://minecraft.fandom.com/wiki/Custom_world_generation#Noise_settings">Noise Settings</a>
+     * on the Minecraft Wiki.
+     */
+    static void chunkGeneratorSettings(Registerable<ChunkGeneratorSettings> registry) {
+        registry.register(ExampleMod.MY_CHUNK_GENERATOR_SETTING, createMyChunkGeneratorSetting())
+    }
+
+    private static ChunkGeneratorSettings createMyChunkGeneratorSetting() {
+        return new ChunkGeneratorSettings(
+                GenerationShapeConfig.create(
+                        // minimum Y coordinate where terrain starts generating, must be multiple of 16
+                        -64,
+                        // height of terrain, must be multiple of 16
+                        128,
+                        // value between 0 and 4 inclusive, change for fun!
+                        1,
+                        // value between 0 and 4 inclusive, change for fun! (yes twice)
+                        3
+                ),
+                // the base building block, like stone or netherrack
+                Blocks.STRIPPED_DARK_OAK_WOOD.getDefaultState(),
+                // the base fluid block, like water or lava
+                Blocks.POWDER_SNOW.getDefaultState(),
+                // just experiment with noise and density functions as you see fit, it's a whole thing
+                // the values in this example have been selected pseudo-randomly and have no deeper meaning
+                new NoiseRouter(
+                        // barrier to separate between aquifiers and open areas in caves
+                        DensityFunctionTypes.constant(0.3),
+                        // affects the probability of generating liquid in an cave for aquifer, between -1 and 1
+                        DensityFunctionTypes.constant(0.7),
+                        // affects the height of the liquid surface at a horizontal position; smaller value leads to higher probability for lower height
+                        DensityFunctionTypes.constant(0.2),
+                        // use lava instead of the water block in aquifiers
+                        DensityFunctionTypes.constant(0d),
+                        // temperature value for biome placement
+                        DensityFunctionTypes.constant(0.5),
+                        // humidity value for biome placement
+                        DensityFunctionTypes.constant(0.5),
+                        // how continental you want your world to be
+                        DensityFunctionTypes.constant(0.9),
+                        // erosion value for biome placement
+                        DensityFunctionTypes.constant(0.1),
+                        // depth value for biome placement
+                        DensityFunctionTypes.constant(0.7),
+                        // weirdness value for biome placement
+                        DensityFunctionTypes.constant(0.3),
+                        // related to height of the surface
+                        DensityFunctionTypes.constant(0.5),
+                        // decides about to place your default block or air where aquifier can generate
+                        DensityFunctionTypes.constant(0.5),
+                        // the last three values have to so something with veins (toggle, ridged, gap), not even the wiki really knows
+                        DensityFunctionTypes.constant(0.5),
+                        DensityFunctionTypes.constant(0.5),
+                        DensityFunctionTypes.constant(0.5)
+                ),
+                // the rule for surfaces, in this case we simply select a block to use
+                new MaterialRules.BlockMaterialRule(Blocks.STRIPPED_DARK_OAK_WOOD.getDefaultState()),
+                // TODO what is this?
+                Collections.emptyList(),
+                // sea level; the logical sea level for mobs is ALWAYS 63
+                64,
+                // if mobs can generate
+                true,
+                // if aquifiers can generate
+                true,
+                // if ore veins can generate
+                false,
+                // if the pre-1.18 random gen should be used
+                false
+        )
+    }
+
+    /**
+     * Main method for creating dimensions.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_dimension#Dimension">Custom Dimension</a>
+     * on the Minecraft Wiki.
+     */
+    static void dimensions(Registerable<DimensionOptions> registry) {
+        def dimensionTypeLookup = registry.getRegistryLookup(RegistryKeys.DIMENSION_TYPE)
+        def chunkGeneratorSettingsLookup = registry.getRegistryLookup(RegistryKeys.CHUNK_GENERATOR_SETTINGS)
+
+        registry.register(ExampleMod.MY_DIMENSION, createMyDimension(dimensionTypeLookup, chunkGeneratorSettingsLookup))
+    }
+
+    private static DimensionOptions createMyDimension(RegistryEntryLookup<DimensionType> dimensionTypeLookup, RegistryEntryLookup<ChunkGeneratorSettings> chunkGeneratorSettingsLookup) {
+        return new DimensionOptions(dimensionTypeLookup.getOrThrow(ExampleMod.MY_DIMENSION_TYPE), new NoiseChunkGenerator(
+                BiomeSource,
+                chunkGeneratorSettingsLookup.getOrThrow(ExampleMod.MY_CHUNK_GENERATOR_SETTING)
+        ))
     }
 
     /**

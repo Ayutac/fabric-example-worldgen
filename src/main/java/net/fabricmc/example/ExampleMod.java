@@ -9,8 +9,10 @@ import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.structure.Structure;
@@ -40,6 +42,8 @@ public class ExampleMod implements ModInitializer {
 	public static final RegistryKey<Biome> MY_BIOME = RegistryKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "my_biome"));
 
 	public static final RegistryKey<DimensionType> MY_DIMENSION_TYPE = RegistryKey.of(RegistryKeys.DIMENSION_TYPE, new Identifier(MOD_ID, "my_dimension_type"));
+	public static final RegistryKey<ChunkGeneratorSettings> MY_CHUNK_GENERATOR_SETTING = RegistryKey.of(RegistryKeys.CHUNK_GENERATOR_SETTINGS, new Identifier(MOD_ID, "my_chunk_generator_setting"));
+	public static final RegistryKey<DimensionOptions> MY_DIMENSION = RegistryKey.of(RegistryKeys.DIMENSION, new Identifier(MOD_ID, "my_dimension"));
 
 	public static final RegistryKey<Structure> MY_HOUSE_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_house"));
 	public static final RegistryKey<Structure> MY_DUNGEON_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_dungeon"));
