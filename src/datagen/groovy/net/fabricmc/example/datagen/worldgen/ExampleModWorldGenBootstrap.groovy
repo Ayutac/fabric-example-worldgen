@@ -31,6 +31,7 @@ import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.biome.GenerationSettings
 import net.minecraft.world.biome.SpawnSettings
 import net.minecraft.world.biome.source.BiomeSource
+import net.minecraft.world.biome.source.FixedBiomeSource
 import net.minecraft.world.dimension.DimensionOptions
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
@@ -517,15 +518,16 @@ class ExampleModWorldGenBootstrap {
      * on the Minecraft Wiki.
      */
     static void dimensions(Registerable<DimensionOptions> registry) {
+        def biomeLookup = registry.getRegistryLookup(RegistryKeys.BIOME)
         def dimensionTypeLookup = registry.getRegistryLookup(RegistryKeys.DIMENSION_TYPE)
         def chunkGeneratorSettingsLookup = registry.getRegistryLookup(RegistryKeys.CHUNK_GENERATOR_SETTINGS)
 
-        registry.register(ExampleMod.MY_DIMENSION, createMyDimension(dimensionTypeLookup, chunkGeneratorSettingsLookup))
+        registry.register(ExampleMod.MY_DIMENSION, createMyDimension(biomeLookup, dimensionTypeLookup, chunkGeneratorSettingsLookup))
     }
 
-    private static DimensionOptions createMyDimension(RegistryEntryLookup<DimensionType> dimensionTypeLookup, RegistryEntryLookup<ChunkGeneratorSettings> chunkGeneratorSettingsLookup) {
+    private static DimensionOptions createMyDimension(RegistryEntryLookup<Biome> biomeLookup, RegistryEntryLookup<DimensionType> dimensionTypeLookup, RegistryEntryLookup<ChunkGeneratorSettings> chunkGeneratorSettingsLookup) {
         return new DimensionOptions(dimensionTypeLookup.getOrThrow(ExampleMod.MY_DIMENSION_TYPE), new NoiseChunkGenerator(
-                BiomeSource,
+                new FixedBiomeSource(biomeLookup.getOrThrow(ExampleMod.MY_BIOME)),
                 chunkGeneratorSettingsLookup.getOrThrow(ExampleMod.MY_CHUNK_GENERATOR_SETTING)
         ))
     }
