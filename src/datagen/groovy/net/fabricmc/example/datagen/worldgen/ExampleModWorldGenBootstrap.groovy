@@ -450,7 +450,7 @@ class ExampleModWorldGenBootstrap {
         return new ChunkGeneratorSettings(
                 GenerationShapeConfig.create(
                         // minimum Y coordinate where terrain starts generating, must be multiple of 16
-                        -64,
+                        -48,
                         // height of terrain, must be multiple of 16
                         128,
                         // value between 0 and 4 inclusive, change for fun!
@@ -495,7 +495,7 @@ class ExampleModWorldGenBootstrap {
                         DensityFunctionTypes.constant(0.5)
                 ),
                 // the rule for surfaces, in this case we simply select a block to use
-                new MaterialRules.BlockMaterialRule(Blocks.STRIPPED_DARK_OAK_WOOD.getDefaultState()),
+                new MaterialRules.BlockMaterialRule(Blocks.DARK_OAK_WOOD.getDefaultState()),
                 // TODO what is this?
                 Collections.emptyList(),
                 // sea level; the logical sea level for mobs is ALWAYS 63
