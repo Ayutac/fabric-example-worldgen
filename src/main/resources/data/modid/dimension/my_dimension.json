@@ -1,0 +1,11 @@
+{
+  "type": "modid:my_dimension_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "modid:my_chunk_generator_settings",
+    "biome_source": {
+      "type": "fixed",
+      "biome": "modid:my_biome"
+    }
+  }
+}

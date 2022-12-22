@@ -512,7 +512,7 @@ class ExampleModWorldGenBootstrap {
     }
 
     /**
-     * Main method for creating dimensions.
+     * Main method for creating dimensions. Sike! This doesn't work atm! Create your dimension manually for now.
      *
      * See also <a href="https://minecraft.fandom.com/wiki/Custom_dimension#Dimension">Custom Dimension</a>
      * on the Minecraft Wiki.
