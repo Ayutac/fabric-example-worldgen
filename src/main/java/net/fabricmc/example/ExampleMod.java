@@ -9,6 +9,7 @@ import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
@@ -37,6 +38,8 @@ public class ExampleMod implements ModInitializer {
 	public static final RegistryKey<PlacedFeature> MY_TREE_PATCH_PF = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(MOD_ID, "my_tree_patch"));
 
 	public static final RegistryKey<Biome> MY_BIOME = RegistryKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "my_biome"));
+
+	public static final RegistryKey<DimensionType> MY_DIMENSION_TYPE = RegistryKey.of(RegistryKeys.DIMENSION_TYPE, new Identifier(MOD_ID, "my_dimension_type"));
 
 	public static final RegistryKey<Structure> MY_HOUSE_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_house"));
 	public static final RegistryKey<Structure> MY_DUNGEON_STRUCTURE = RegistryKey.of(RegistryKeys.STRUCTURE, new Identifier(MOD_ID, "my_dungeon"));

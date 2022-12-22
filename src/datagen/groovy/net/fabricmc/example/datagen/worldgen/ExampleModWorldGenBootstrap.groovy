@@ -18,6 +18,7 @@ import net.minecraft.structure.pool.StructurePool
 import net.minecraft.structure.pool.StructurePoolElement
 import net.minecraft.structure.pool.StructurePools
 import net.minecraft.structure.rule.TagMatchRuleTest
+import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DataPool
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -29,6 +30,8 @@ import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.BiomeKeys
 import net.minecraft.world.biome.GenerationSettings
 import net.minecraft.world.biome.SpawnSettings
+import net.minecraft.world.dimension.DimensionType
+import net.minecraft.world.dimension.DimensionTypes
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.HeightContext
 import net.minecraft.world.gen.StructureTerrainAdaptation
@@ -367,6 +370,59 @@ class ExampleModWorldGenBootstrap {
                         //spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.SQUID), 10, 5, 5).
                         build())
                 .build()
+    }
+
+    /**
+     * Main method for creating dimensions.
+     *
+     * See also <a href="https://minecraft.fandom.com/wiki/Custom_dimension#Dimension_type">Custom Dimension Type</a>
+     * on the Minecraft Wiki.
+     */
+    static void dimensionTypes(Registerable<DimensionType> registry) {
+        registry.register(ExampleMod.MY_DIMENSION_TYPE, createMyDimensionType())
+    }
+
+    private static DimensionType createMyDimensionType() {
+        return new DimensionType(
+                // if there should always be a certain time in the dimension (not in our case)
+                OptionalLong.empty(),
+                // if we want to have sky light; set false for cave dimensions
+                true,
+                // if a (bedrock) ceiling should theoretically (not practically) generate in this dimension
+                false,
+                // if water should evaporate like in the nether
+                false,
+                // if the compass should spin randomly and if beds are usable
+                true,
+                // how to scale coordinates with the overworld, nether is 8d
+                1d,
+                // true if the bed should NOT blow up when used in this dimension
+                true,
+                // if the respawn anchor should work in this dimension
+                false,
+                // the minimum y value, must be multiple of 16
+                -64,
+                // height of this dimension, must be a multiple of 16 and max 2016
+                256,
+                // logical height, usually the same as height
+                256,
+                // tag key for blocks that burn indefinitely
+                BlockTags.INFINIBURN_OVERWORLD,
+                // identifier for dimension effects, use overworld for sun, moon, and clouds, nether for thick fog and end for the spotted dark sky
+                DimensionTypes.OVERWORLD_ID,
+                // ambient light, 0f is following skylight, 1f means no ambient light; nether has 0.1f
+                0f,
+                new DimensionType.MonsterSettings(
+                        // if piglins should zombify in this dimension
+                        false,
+                        // if raids should be possible in this dimension
+                        false,
+                        // sky light spawn level for monsters
+                        ConstantIntProvider.create(7),
+                        // block light spawn level for monsters
+                        7
+                )
+        )
     }
 
     /**
