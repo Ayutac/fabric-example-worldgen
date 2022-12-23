@@ -50,6 +50,7 @@ import net.minecraft.world.gen.chunk.placement.SpreadType
 import net.minecraft.world.gen.chunk.placement.StructurePlacement
 import net.minecraft.world.gen.densityfunction.DensityFunction
 import net.minecraft.world.gen.densityfunction.DensityFunctionTypes
+import net.minecraft.world.gen.densityfunction.DensityFunctions
 import net.minecraft.world.gen.feature.*
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize
 import net.minecraft.world.gen.foliage.BlobFoliagePlacer
@@ -443,10 +444,11 @@ class ExampleModWorldGenBootstrap {
      * on the Minecraft Wiki.
      */
     static void chunkGeneratorSettings(Registerable<ChunkGeneratorSettings> registry) {
-        registry.register(ExampleMod.MY_CHUNK_GENERATOR_SETTING, createMyChunkGeneratorSetting())
+        def densityFunctionLookup = registry.getRegistryLookup(RegistryKeys.DENSITY_FUNCTION)
+        registry.register(ExampleMod.MY_CHUNK_GENERATOR_SETTING, createMyChunkGeneratorSetting(densityFunctionLookup))
     }
 
-    private static ChunkGeneratorSettings createMyChunkGeneratorSetting() {
+    private static ChunkGeneratorSettings createMyChunkGeneratorSetting(RegistryEntryLookup<DensityFunction> densityFunctionLookup) {
         return new ChunkGeneratorSettings(
                 GenerationShapeConfig.create(
                         // minimum Y coordinate where terrain starts generating, must be multiple of 16
@@ -488,7 +490,11 @@ class ExampleModWorldGenBootstrap {
                         // related to height of the surface
                         DensityFunctionTypes.constant(0.5),
                         // decides about to place your default block or air where aquifier can generate
-                        DensityFunctionTypes.constant(0.5),
+                        // this is the most important density function of all, for it generates your surface and caves if done right
+                        DensityFunctionTypes.mul(
+                                DensityFunctionTypes.yClampedGradient(-64, 70, 0d, 1d),
+                                densityFunctionLookup.getOrThrow(DensityFunctions.RIDGES_FOLDED_OVERWORLD).value()
+                        ),
                         // the last three values have to so something with veins (toggle, ridged, gap), not even the wiki really knows
                         DensityFunctionTypes.constant(0.5),
                         DensityFunctionTypes.constant(0.5),

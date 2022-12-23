@@ -1,5 +1,5 @@
 {
-  "type": "modid:my_dimension_type",
+  "type": "minecraft:my_dimension_type",
   "generator": {
     "type": "minecraft:noise",
     "settings": "modid:my_chunk_generator_setting",
